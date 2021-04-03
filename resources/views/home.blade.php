@@ -2,6 +2,7 @@
 
 @section('content')
 <div id="menu" class="container maba-center">
+    <div><a href="/home">Home</a></div>
     <div class="row" style="justify-content: flex-end;">
         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
             {{ Auth::user()->name }}
@@ -18,13 +19,12 @@
             </form>
         </div>
     </div>
-    
+
     <div class="row" style="margin-bottom: 50px;">
          
             <!--div class="row"-->
             <maba-menu></maba-menu>
             <!--/div-->
-        
     </div>
     <!--div class="row" style="margin-bottom: 50px;">
         <div class="col-md-12">

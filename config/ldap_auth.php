@@ -235,7 +235,7 @@ return [
         |
         */
 
-        'sync' => env('LDAP_PASSWORD_SYNC', false),
+        'sync' => env('LDAP_PASSWORD_SYNC', true),
 
         /*
         |--------------------------------------------------------------------------
@@ -291,9 +291,10 @@ return [
 
     'sync_attributes' => [
 
-        /*'email' => 'userprincipalname',*/
-        'email' => 'mail',
+        'email' => 'userprincipalname',
+        /*'email' => 'mail',*/
         'name' => 'cn',
+        'domain' => 'samaccountname',
 
     ],
 

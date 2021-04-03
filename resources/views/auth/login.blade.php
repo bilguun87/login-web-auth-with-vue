@@ -36,7 +36,7 @@
                 @csrf
                 <div class="form-group-row maba-login-right-image"><img src="/img/cyber-security-team.jpg" alt=""></div>
                 <div class="form-group row" style="padding-right: 15px;">
-                    <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                    <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Domain Name') }}</label>
 
                     <div class="col-md-8">
                         <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>

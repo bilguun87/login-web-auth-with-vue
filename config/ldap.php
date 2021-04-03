@@ -198,8 +198,11 @@ return [
                 |
                 */
 
-                'username' => env('LDAP_USERNAME', 'dlpadmin@statebank.mn'),
-                'password' => env('LDAP_PASSWORD', 'INFOsec$123'),
+                /*'username' => env('LDAP_USERNAME', 'dlpadmin@statebank.mn'),
+                'password' => env('LDAP_PASSWORD', 'INFOsec$123'),*/
+                'username' => env('LDAP_USERNAME', 'test@statebank.mn'),
+                'password' => env('LDAP_PASSWORD', 'Asdf##123'),
+                
 
                 /*
                 |--------------------------------------------------------------------------

@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\Rules\AllowedOrNot;
-use App\Rules\LoginSuccess;
 
 class LoginController extends Controller
 {
@@ -57,12 +56,11 @@ class LoginController extends Controller
         ]);
 
         $credentials = $request->only('name', 'password');
-        if (Auth::attempt($credentials)) {
-            // Authentication passed...
-            return redirect()->intended('home');
+        if (!Auth::attempt($credentials)) {
+            // Authentication failed...
+            return redirect()->back()->withInput(['name'])->withErrors(['name' => 'Wrong credentials']);    
         }
-        
-        return redirect()->back()->withInput(['name'])->withErrors(['name' => 'Wrong credentials']);
+        return redirect()->intended('home');
     }
 
 }

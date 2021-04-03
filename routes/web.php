@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,7 @@ Auth::routes(['register' => false, 'reset' => false]);
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::middleware(['auth'])->group(function () {
 	Route::view('/home', 'home');
+	//Route::post('/genreport', [App\Http\Controllers\ReportController::class, 'result']);
 });
 
 Route::get('/permission', [App\Http\Controllers\PermissionController::class, 'index'])->name('permission');
@@ -38,4 +40,11 @@ Route::post('/users/assign', [App\Http\Controllers\UserController::class, 'assig
 Route::post('/users/removerole', [App\Http\Controllers\UserController::class, 'removerole'])->name('removerole');
 
 Route::view('/role2', 'role2')->middleware(['auth','role2']);
+
 Route::view('/vulners', 'vulnerabilities.index')->name('vulners')->middleware('auth');
+
+Route::get('/vulners/{subpage}', function($subpage){
+	return view('vulnerabilities.index',['subpage' => $subpage]);
+})->name('vulners')->middleware('auth');
+
+//Route::resource('groups',App\Http\Controllers\API\V1\GroupController::class);

@@ -42,9 +42,9 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport',
             'provider' => 'users',
-            'hash' => false,
+            /*'hash' => false,*/
         ],
     ],
 
@@ -68,7 +68,6 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'ldap',//'eloquent',
-            /*'model' => App\Models\User::class,*/
             'model' => App\Models\User::class,
         ],
 

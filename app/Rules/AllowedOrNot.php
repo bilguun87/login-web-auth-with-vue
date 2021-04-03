@@ -3,7 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use App\Models\User;
+use App\Models\AllowedUser;
 
 class AllowedOrNot implements Rule
 {
@@ -27,7 +27,7 @@ class AllowedOrNot implements Rule
     public function passes($attribute, $value)
     {
         //
-        if (User::where('domain', $value)->first())
+        if (AllowedUser::where('domain', $value)->first())
             return true;
         else
             return false;
