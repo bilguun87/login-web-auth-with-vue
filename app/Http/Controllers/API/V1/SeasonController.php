@@ -17,7 +17,24 @@ class SeasonController extends Controller
     public function index()
     {
         //
-        return SeasonResource::collection(Season::orderByDesc('id')->get());
+        try{
+            return SeasonResource::collection(Season::orderByDesc('id')->get());
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -38,10 +55,25 @@ class SeasonController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        //dd(Season::create($request->all())->toSql());
-        $result = Season::create($request->all());
-        return response()->json(array('data' => $result));
+        try{
+            $result = Season::create($request->all());
+            return response()->json(array('data' => $result));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -86,8 +118,24 @@ class SeasonController extends Controller
      */
     public function destroy($id)
     {
-        //dd($id);
-        $result = Season::destroy($id);
-        return response()->json(array('data' => $result ));
+        try{
+            $result = Season::destroy($id);
+            return response()->json(array('data' => $result ));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 }

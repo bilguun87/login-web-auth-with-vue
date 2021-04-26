@@ -86,7 +86,7 @@
 							</div>
 						</form>
 						<div class="col-md-12">
-							Result section
+							{{ allocResult }}
 						</div>
 					</div>
 					<div id="departments-div" class="container tab-pane fade"><br>
@@ -175,6 +175,7 @@
                 seasonLoad: true,
                 groupLoad: true,
                 errmsg: "",
+                allocResult: "",
 			}
 		},
 		mounted() {
@@ -191,7 +192,8 @@
 				axios.post('/api/allotvulners', this.form)
 				.then((response) => {
 					this.loading = false;
-					console.log(response.data);
+					//console.log(response.data);
+					this.allocResult = 'Successfully allocated';
 				})
 				.catch( function (error) {
                 	self.loading = false;

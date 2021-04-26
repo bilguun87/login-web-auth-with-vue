@@ -19,7 +19,13 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('pagination', require('laravel-vue-pagination'));
 
+/*
+
+Vulnerabilities section
+
+*/
 Vue.component('maba-menu', require('./components/menu.vue').default);
 Vue.component('maba-vulnindex', require('./components/vulner-components/vulndashboard.vue').default);
 Vue.component('maba-vulnsearch', require('./components/vulner-components/vulnersearch.vue').default);
@@ -28,8 +34,17 @@ Vue.component('maba-vulnallot', require('./components/vulner-components/vulnergr
 Vue.component('maba-vulnservers', require('./components/vulner-components/vulnerhosts.vue').default);
 Vue.component('maba-vulnreport', require('./components/vulner-components/generatereport.vue').default);
 //Vue.component('vulnreport-result', require('./components/vulner-components/reportresult.vue').default);
-Vue.component('pagination', require('laravel-vue-pagination'));
 
+
+/*
+
+Backup section
+
+*/
+Vue.component('backup-index', require('./components/backups/backupindex.vue').default);
+Vue.component('backup-types', require('./components/backups/backuptypes.vue').default);
+Vue.component('backup-places', require('./components/backups/backupplaces.vue').default);
+Vue.component('backup-moves', require('./components/backups/backupmoves.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

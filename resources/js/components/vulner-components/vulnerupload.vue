@@ -107,7 +107,7 @@
                     self = this;
                     self.compare = true;
                     self.loading = false;
-                    console.log(error.response);
+                    //console.log(error.response);
                     if (error.response.status == 401)
                         window.location.href = '/login';
                     else if (error.response.status == 500)
@@ -139,7 +139,7 @@
                 //console.log(selectedFiles);
                 for (var i=0; i < selectedFiles.length; i++){
                     //var file = selectedFiles[i];
-                    console.log(selectedFiles[i]);
+                    //console.log(selectedFiles[i]);
                     for (var j=0; j < this.numberOfFiles; j++){
                         if (this.files[j].name == selectedFiles[i].name &&
                             this.files[j].size == selectedFiles[i].size)
@@ -219,7 +219,7 @@
                 .then ((response) => {
                     //console.log(response.data);
                     this.errmsg = '';
-                    this.uploaded += response.data.rows;
+                    this.uploaded = this.uploaded + response.data.rows;
                     this.loading = false;
                     this.uploadedFiles.push(...this.files);
                     this.files = [];

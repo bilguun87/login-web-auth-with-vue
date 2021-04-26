@@ -402,3 +402,65 @@ ul.no-bullets {
 	color: white;
 	font-weight: lighter;
 }
+
+.vdp-datepicker input[type=text] {
+	/*width: 80px;*/
+	border: 1px solid #ced4da;
+	border-radius: 0.2rem;
+	font-size: 11px;
+	padding: 0.25rem 0.5rem;
+}
+
+.move-modal {
+	display: none;
+	position: absolute;
+	background-color: white;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	z-index: 1;
+	float: right;
+	padding: 5px;
+}
+
+.show-move-modal {
+	display: block;
+}
+
+.custom-select-container {
+	position: absolute;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	background-color: white;
+	max-height: 150px;
+	display: block;
+	overflow: hidden; 
+	overflow-y: scroll;
+	width: 100%;
+	z-index: 1;
+}
+
+.custom-select-ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.custom-select-ul li {
+	font-size: 12px;
+	border-bottom: 1px solid #ced4da;
+}
+
+.custom-select-ul li:hover {
+	background-color: #ced4da;
+}
+
+.custom-select-container::-webkit-scrollbar {
+  width: 0.5em;
+}
+ 
+.custom-select-container::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+ 
+.custom-select-container::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  /*outline: 1px solid slategrey;*/
+}

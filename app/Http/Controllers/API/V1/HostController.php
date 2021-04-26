@@ -17,24 +17,41 @@ class HostController extends Controller
      */
     public function index(Request $request)
     {
-        $ipaddr = [];
-        $group_id = $request->input('group_id');
-        $desc = $request->input('desc');
-        if ($request->input('ipaddr'))
-            $ipaddr = explode(",",preg_replace('/\s+/', '', $request->input('ipaddr')));
-        $query = new Host();
-        $query = $query->when($desc, function($query, $desc){
-            return $query->where('description','LIKE','%'.$desc.'%'); });
-        $query = $query->when($group_id, function($query, $group_id){
-            return $query->where('group_id', $group_id); });
-        if (count($ipaddr) > 0)
-            $query = $query->whereIn('ip', $ipaddr);
-        $query = $query->orderByDesc('id');
-        
-        $result = $query->paginate(10);
-        //dd($query->toSql());
-        return HostResource::collection($result);
-        //return HostResource::collection(Host::orderByDesc('id')->paginate(10));
+        try{
+            $ipaddr = [];
+            $group_id = $request->input('group_id');
+            $desc = $request->input('desc');
+            if ($request->input('ipaddr'))
+                $ipaddr = explode(",",preg_replace('/\s+/', '', $request->input('ipaddr')));
+            $query = new Host();
+            $query = $query->when($desc, function($query, $desc){
+                return $query->where('description','LIKE','%'.$desc.'%'); });
+            $query = $query->when($group_id, function($query, $group_id){
+                return $query->where('group_id', $group_id); });
+            if (count($ipaddr) > 0)
+                $query = $query->whereIn('ip', $ipaddr);
+            $query = $query->orderByDesc('id');
+            
+            $result = $query->paginate(10);
+            //dd($query->toSql());
+            return HostResource::collection($result);
+            //return HostResource::collection(Host::orderByDesc('id')->paginate(10));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -116,14 +133,30 @@ class HostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request);
         $request->validate(['ip' => 'required|ipv4']);
-        $result = Host::find($id)->update([
-            'ip' => $request->input('ip'),
-            'description' => $request->input('desc'),
-            'group_id' => $request->group_id
-        ]);
-        return response()->json(array('data' => $result));
+        try{
+            $result = Host::find($id)->update([
+                'ip' => $request->input('ip'),
+                'description' => $request->input('desc'),
+                'group_id' => $request->group_id
+            ]);
+            return response()->json(array('data' => $result));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -138,7 +171,24 @@ class HostController extends Controller
         $validator = Validator::make(["id" => $id],['id' => 'numeric']);
         if ($validator->fails())
             return response()->json(array('message' => 'Validation Failed'), 422);
-        $result = Host::destroy($id);
-        return response()->json(array('data' => $result ));
+        try{
+            $result = Host::destroy($id);
+            return response()->json(array('data' => $result ));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 }

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth:api')->group(function(){
 	Route::get('/menu', [App\Http\Controllers\API\V1\MenuController::class, 'index']);
+	/*Vulnerabilities section*/
 	Route::get('/getgroups', [App\Http\Controllers\API\V1\GroupController::class, 'index']);
 	Route::get('/getseasons', [App\Http\Controllers\API\V1\SeasonController::class, 'index']);
 	Route::post('/vulnersearch', [App\Http\Controllers\API\V1\VulnerController::class, 'search']);
@@ -41,4 +42,28 @@ Route::middleware('auth:api')->group(function(){
 	Route::post('/genreport', [App\Http\Controllers\API\V1\ReportController::class, 'result']);
 	Route::get('/getnfix', [App\Http\Controllers\API\V1\VulnerController::class, 'getlastnfixeds']);
 	//Route::post('/searchhosts', [App\Http\Controllers\API\V1\HostController::class, 'search']);
+	/*Backup section*/
+	Route::get('/backup/search', [App\Http\Controllers\API\V1\RecordController::class, 'search']);
+	Route::get('/backup/recbyname', [App\Http\Controllers\API\V1\RecordController::class, 'searchbyname']);
+	Route::put('/backup/{id}', [App\Http\Controllers\API\V1\RecordController::class, 'update']);
+	Route::put('/backup/delete/{id}', [App\Http\Controllers\API\V1\RecordController::class, 'markAsDelete']);
+	Route::post('/backup/add', [App\Http\Controllers\API\V1\RecordController::class, 'store']);
+
+	Route::get('/backup/types', [App\Http\Controllers\API\V1\TypeController::class, 'index']);
+	Route::get('/backup/types/list', [App\Http\Controllers\API\V1\TypeController::class, 'search']);
+	Route::put('/backup/types/update/{id}', [App\Http\Controllers\API\V1\TypeController::class, 'update']);
+	Route::post('/backup/types/add', [App\Http\Controllers\API\V1\TypeController::class, 'store']);
+	Route::delete('/backup/types/delete/{id}', [App\Http\Controllers\API\V1\TypeController::class, 'destroy']);
+
+	Route::get('/backup/places', [App\Http\Controllers\API\V1\PlaceController::class, 'index']);
+	Route::get('/backup/places/list', [App\Http\Controllers\API\V1\PlaceController::class, 'search']);
+	Route::put('/backup/places/update/{id}', [App\Http\Controllers\API\V1\PlaceController::class, 'update']);
+	Route::post('/backup/places/add', [App\Http\Controllers\API\V1\PlaceController::class, 'store']);
+	Route::delete('/backup/places/delete/{id}', [App\Http\Controllers\API\V1\PlaceController::class, 'destroy']);
+
+	Route::get('/backup/moves', [App\Http\Controllers\API\V1\MoveController::class, 'index']);
+	Route::get('/backup/moves/list', [App\Http\Controllers\API\V1\MoveController::class, 'search']);
+	//Route::get('/backup/moves/search', [App\Http\Controllers\API\V1\MoveController::class, 'search']);
+	Route::put('/backup/moves/update/{id}', [App\Http\Controllers\API\V1\MoveController::class, 'update']);
+	Route::post('/backup/moves/add', [App\Http\Controllers\API\V1\MoveController::class, 'store']);
 });

@@ -234,7 +234,7 @@ class VulnerController extends Controller
             foreach($files as $file){
                 //dd($file);
                 //$handle = $this->csvutf8($file);
-                dd($file);
+                //dd($file);
                 $handle = fopen($file, 'r');
                 /*if (($handle = fopen("test.csv", "r")) !== FALSE) {
                     while (($data = fgetcsv($handle, 2000, ",")) !== FALSE) {
@@ -317,21 +317,21 @@ class VulnerController extends Controller
             if(strpos($ipaddr,",") !== false){
                 $ips = explode(",",$ipaddr);
                 //DB::table('nesresults')->where('season_id','=',$request->season)->whereIn('host',$ips)->update(['group_id' => $request->agroup]);
-                $result = DB::table('ip')->whereIn('ip',$ips)->update(['group_id' => $request->group_id]);
+                $result = DB::table('hosts')->whereIn('ip',$ips)->update(['group_id' => $request->group_id]);
             }
             else{
-                $result = DB::table('ip')->where('ip',$ipaddr)->update(['group_id' => $request->group_id]);
+                $result = DB::table('hosts')->where('ip',$ipaddr)->update(['group_id' => $request->group_id]);
             }
         }
         elseif ($request->type == "reg") {
 
-            $groups = DB::table('ip')->groupBy('group_id')->select('group_id')->get();
+            $groups = DB::table('hosts')->groupBy('group_id')->select('group_id')->get();
             foreach ($groups as $gr) {
                 //print($gr->group_id);
                 try{
                     $result = Vulnerability::where('season_id', $request->season_id)
                     ->whereIn('host', function($query) use ($gr){
-                        $query->select('ip')->from('ip')->where('group_id',$gr->group_id);
+                        $query->select('ip')->from('hosts')->where('group_id',$gr->group_id);
                     })->update(['group_id' => $gr->group_id]);
                 }
                 catch(Exception $e){
@@ -344,7 +344,7 @@ class VulnerController extends Controller
         elseif ($request->type == "allip") {
             /*Бүлэглэгдээгүй IP-уудыг бүгдийг бүлэгт оноох*/
             try{
-                $result = DB::table('ip')->whereNull('group_id')->update(['group_id' => $request->group_id]);
+                $result = DB::table('hosts')->whereNull('group_id')->update(['group_id' => $request->group_id]);
             }
             catch(Exception $e){
                 return response()->json(array('error' => $e), 500);

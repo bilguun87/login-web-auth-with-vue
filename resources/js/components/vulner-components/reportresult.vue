@@ -303,11 +303,12 @@
 		},
 		methods: {
 			exportPDF: function(){
-				if (new Date().getMonth() < 3)
+				var dt = new Date();
+				if (dt.getMonth() < 3)
 					var season = "I";
-				else if (new Date().getMonth() >= 3 && Date().getMonth() < 6)
+				else if (dt.getMonth() >= 3 && dt.getMonth() < 6)
 					var season = "II";
-				else if (new Date().getMonth() >= 6 && Date().getMonth() < 9)
+				else if (dt.getMonth() >= 6 && dt.getMonth() < 9)
 					var season = "III";
 				else
 					var season = "IV";
@@ -316,7 +317,7 @@
 					margin: [10,20,30,10],
 					pagebreak: {mode: 'css'},
 					html2canvas: {scale: 3, y: 0, scrollY: 0},
-					filename: "vulnerresult_" + new Date().getFullYear() + "_" + season + ".pdf",
+					filename: "vulnerresult_" + dt.getFullYear() + "_" + season + ".pdf",
 					jsPDF: {unit: 'mm', format: 'a4', orientation: 'portrait'},
 					pdfCallback: this.pdfCallback
 				};

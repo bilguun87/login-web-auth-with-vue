@@ -22,7 +22,7 @@
 
                     <label for="date" class="col-md-1 col-form-label text-md-right form-control-xs" style="font-size: 11px;"><b>Date:</b></label>
                     <div class="col-md-2">
-                        <datepicker v-model="form.date" name="uniquename"></datepicker>
+                        <datepicker v-model="form.date"></datepicker>
                     </div>
 				</div>
 				<div class="form-group row">

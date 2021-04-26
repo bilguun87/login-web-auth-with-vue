@@ -55,7 +55,7 @@ class ReportController extends Controller
     }
 
     protected function getVulnerByRiskCount($sid, $risk, $status = null, $group = null, $fix = null, $ip = null, $group_null = null){
-        //dd($group);
+        //DB::enableQueryLog();
         $by_risk_count = Vulnerability::where('season_id',$sid)
             ->where('unfixable','<>',1)
             ->where('risk',$risk);
@@ -79,7 +79,7 @@ class ReportController extends Controller
             $by_risk_count = $by_risk_count->whereIn('host',$ip);
         //dd($by_risk_count->ToSql());
         $result = $by_risk_count->count();
-        //dd($by_risk_count);
+        //dd(DB::getQueryLog());
         return $result;
     }
 
@@ -233,13 +233,15 @@ class ReportController extends Controller
         return $topfive;
     }
 
-    protected function getVulnerFixedCount($sid, $risk = null, $ip = null, $group = null, $group_null){
+    protected function getVulnerFixedCount($sid, $status = null, $risk = null, $ip = null, $group = null, $group_null){
         $fixed = DB::table('nesresults')
                 ->where('season_id','=',$sid)
                 ->where('unfixable','<>',1)
                 ->where('fix','=','1');
         if ($ip !== null)
             $fixed = $fixed->whereIn('host',$ip);
+        if ($status !== null)
+            $fixed = $fixed->whereIn('status', $status);
         if ($risk !== null)
             $fixed = $fixed->whereIn('risk',$risk);
         if ($group !== null)
@@ -300,8 +302,9 @@ class ReportController extends Controller
 
         $request->validate([
         	'season' => 'required|numeric',
-        	'risk' => 'array|max:4|min:1',
-        	'fix' => 'array|max:2|min:1',
+        	'risk' => 'required|array|max:4|min:1',
+        	'fix' => 'required|array|max:2|min:1',
+        	'status' => 'required|array|max:3|min:1',
         	/*'group_null' => 'required_without:group',*/
         	'group' => 'required_if:group_null,false',
         ]);
@@ -360,13 +363,22 @@ class ReportController extends Controller
         else
             $data['allcurrentlow'] = 0;
         /*Шинэ цоорхойнууд*/
-        $data['allcurrent0'] = $this->getVulnerByStatusCount($request->season,"0", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
+        if (in_array(0, $request->status))
+        	$data['allcurrent0'] = $this->getVulnerByStatusCount($request->season,"0", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
+        else
+        	$data['allcurrent0'] = 0;
         /*Хостын хувьд шинэ цоорхойнууд*/
-        $data['allcurrent1'] = $this->getVulnerByStatusCount($request->season,"1", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
+        if (in_array(1, $request->status))
+        	$data['allcurrent1'] = $this->getVulnerByStatusCount($request->season,"1", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
+        else
+        	$data['allcurrent1'] = 0;
         /*Дахин илэрсэн цоорхойнууд*/
-        $data['allcurrent2'] = $this->getVulnerByStatusCount($request->season,"2", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
+        if (in_array(2, $request->status))
+        	$data['allcurrent2'] = $this->getVulnerByStatusCount($request->season,"2", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
+        else
+        	$data['allcurrent2'] = 0;
         /*Засагдсан цоорхойнууд*/
-        $data['allcurrent4'] = $this->getVulnerFixedCount($request->season, $request->risk, $ipArray,$request->group, $request->group_null);
+        $data['allcurrent4'] = $this->getVulnerFixedCount($request->season, $request->status, $request->risk, $ipArray,$request->group, $request->group_null);
         
         /*Өнгөрсөн улиралтай харьцуулахын тулд өнгөрсөн улирлыг авч байна*/
         $prev_season = $this->getPrevSeason($request->season);
@@ -401,7 +413,7 @@ class ReportController extends Controller
             $data['allprev1'] = $this->getVulnerByStatusCount($prev_season->id,"1", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
             $data['allprev2'] = $this->getVulnerByStatusCount($prev_season->id,"2", $request->risk, $request->group, $request->fix, $ipArray, $request->group_null);
             /*Өнгөрсөн улиралд нийт засварласан тоо*/
-            $data['allprev4'] = $this->getVulnerFixedCount($prev_season->id, $request->risk, $ipArray,$request->group, $request->group_null);
+            $data['allprev4'] = $this->getVulnerFixedCount($prev_season->id, $request->status, $request->risk, $ipArray,$request->group, $request->group_null);
             
             //return $data['allprev4'];
         }

@@ -131,14 +131,20 @@
 				this.form.ipaddr = ipaddr;
 				this.loading = true;
 				this.errmsg = "";
+				var pagesize = 10;
 				axios.post('/api/createhost', this.form)
 				.then((response) => {
 					//console.log(response.data.data);
 					//this.hosts.unshift(response.data.data);
 
 					this.hosts = response.data.data.concat(this.hosts);
-					for (var i = 0; i < response.data.data.length; i++)
-						this.hosts.pop();
+					/*for (var i = 0; i < response.data.data.length; i++)
+						this.hosts.pop();*/
+					if (this.hosts.length > pagesize){
+						var iluu = this.hosts.length - pagesize;
+						for (var i = 0; i < iluu; i++)
+							this.hosts.pop();		
+					}
 					this.form = {};
 					this.loading = false;
 					//this.hosts.unshift({
@@ -160,7 +166,7 @@
 			},
 			setEditIP: function(event){
 				this.editHost.ip = event.target.value;
-				console.log(event.target.value);
+				//console.log(event.target.value);
 			},
 			setEditDesc: function(event){
 				this.editHost.desc = event.target.value;

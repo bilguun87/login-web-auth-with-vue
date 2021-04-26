@@ -17,7 +17,24 @@ class MenuController extends Controller
     public function index()
     {
         //
-        return MenuResource::collection(Menu::all());
+        try{
+            return MenuResource::collection(Menu::all());
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 
     /**

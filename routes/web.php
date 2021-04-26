@@ -22,10 +22,7 @@ Route::get('/', function () {
 Auth::routes(['register' => false, 'reset' => false]);
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::middleware(['auth'])->group(function () {
-	Route::view('/home', 'home');
-	//Route::post('/genreport', [App\Http\Controllers\ReportController::class, 'result']);
-});
+
 
 Route::get('/permission', [App\Http\Controllers\PermissionController::class, 'index'])->name('permission');
 Route::post('/permission/store',[App\Http\Controllers\PermissionController::class, 'store'])->name('storepermission');
@@ -41,10 +38,17 @@ Route::post('/users/removerole', [App\Http\Controllers\UserController::class, 'r
 
 Route::view('/role2', 'role2')->middleware(['auth','role2']);
 
-Route::view('/vulners', 'vulnerabilities.index')->name('vulners')->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+	Route::view('/home', 'home');
+	Route::view('/vulners', 'vulnerabilities.index');
+	Route::get('/vulners/{subpage}', function($subpage){
+		return view('vulnerabilities.index',['subpage' => $subpage]);
+	});
+	Route::view('/backups', 'backups.index');
+	Route::get('/backups/{subpage}', function($subpage){
+		return view('backups.index',['subpage' => $subpage]);
+	});
+});
 
-Route::get('/vulners/{subpage}', function($subpage){
-	return view('vulnerabilities.index',['subpage' => $subpage]);
-})->name('vulners')->middleware('auth');
-
+Route::get('/ldap_test', [App\Http\Controllers\Test::class, 'ldap_test']);
 //Route::resource('groups',App\Http\Controllers\API\V1\GroupController::class);

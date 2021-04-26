@@ -39,13 +39,28 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required']);
-        $newdep = $request->all();
-        //dd($data);
-        $newdep['created_date'] = date('Y-m-d H:i:s');
-        //dd($newdep);
-        $result = Group::create($newdep);
-        return response()->json(array('data' => $result));
+        try{
+            $request->validate(['name' => 'required']);
+            $newdep = $request->all();
+            $newdep['created_date'] = date('Y-m-d H:i:s');
+            $result = Group::create($newdep);
+            return response()->json(array('data' => $result));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 
     /**
@@ -79,17 +94,34 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $reqs = $request->all();
-        $reqs['id'] = $id;
-        $validator = Validator::make($reqs, ['id' =>'required|numeric', 'name' => 'required']);
-        if ($validator->fails())
-            return response()->json(array('message' => 'Validation Failed'), 422);
-        $group = Group::find($id);
-        if ($group){
-            $result = $group->update($request->all());
-            return response()->json(array('data' => $result ));
+        try{
+            $reqs = $request->all();
+            $reqs['id'] = $id;
+            $validator = Validator::make($reqs, ['id' =>'required|numeric', 'name' => 'required']);
+            if ($validator->fails())
+                return response()->json(array('message' => 'Validation Failed'), 422);
+            $group = Group::find($id);
+            if ($group){
+                $result = $group->update($request->all());
+                return response()->json(array('data' => $result ));
+            }
+            return response()->json(array('message' => "couldn't found" ), 400);
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
         }
-        return response()->json(array('message' => "couldn't found" ), 400);
     }
 
     /**
@@ -103,7 +135,24 @@ class GroupController extends Controller
         $validator = Validator::make(["id" => $id],['id' => 'numeric','not mumber']);
         if ($validator->fails())
             return response()->json(array('message' => 'Validation Failed'), 422);
-        $result = Group::destroy($id);
-        return response()->json(array('data' => $result ));
+        try{
+            $result = Group::destroy($id);
+            return response()->json(array('data' => $result ));
+        }catch(\Throwable $e){
+            $errors = [];
+            $data = [];
+            if (    
+                    str_contains($e->getMessage(),'select') ||
+                    str_contains($e->getMessage(),'insert') ||
+                    str_contains($e->getMessage(),'update') ||
+                    str_contains($e->getMessage(),'delete') ||
+                    str_contains($e->getMessage(),'sqlstate')
+                ){
+                $errors = explode(':', $e->getMessage(), 20);
+                $data['message'] = $errors[0].': Data base related error';
+            }
+            //dd($e);
+            return response()->json($data, 500);
+        }
     }
 }

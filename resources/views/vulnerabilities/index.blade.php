@@ -59,10 +59,7 @@
         </div>
     </nav>
     @if (isset($subpage))
-
-        {{-- @if ($subpage === 'search') --}}
-            <maba-vuln{!! $subpage !!}>
-        {{-- @endif --}}
+        <maba-vuln{!! $subpage !!}>
     @else
         <maba-vulnindex></maba-vulnindex>
     @endif
