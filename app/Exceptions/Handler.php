@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Throwable;
+use Adldap\Auth\BindException as BindException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -33,5 +36,29 @@ class Handler extends ExceptionHandler
     public function register()
     {
         //
+        /*$this->renderable(function (Exceptions $e, $request) {
+            dd($e);
+            if($e instanceof BindException) {
+                return response('The specified URL cannot be  found.', 404);
+            }
+        });*/
+    }
+
+    public function report(Throwable $e)
+    {
+        //
+    }
+
+    public function render($request, Throwable $e){
+        if ($e instanceof BindException){
+            return response()->view('errors.500.adldap', [], 500);
+        }
+        if ($e instanceof MethodNotAllowedHttpException || $e instanceof RouteNotFoundException) {
+            return response()->view('errors.404', [], 404);
+            //return "ADLDAP error";
+        }
+        
+        return parent::render($request, $e);
+
     }
 }
