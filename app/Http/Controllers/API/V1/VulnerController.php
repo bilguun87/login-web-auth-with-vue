@@ -133,7 +133,7 @@ class VulnerController extends Controller
 
      */
     public function search(Request $request){
-
+        // DB::enableQueryLog();
         if ($request->hasAny(['vulname','ipaddr','group_id','season_id','status','port','protocol'])){
             $vulname = $request->input('vulname');
             $ipaddr = [];
@@ -175,9 +175,9 @@ class VulnerController extends Controller
                 //return $query->where('fix', $fix); });
             //->get();
             $query = $query->orderBy('host');
-            //dd($query->toSql());
+            // dd($query->toSql());
             $result = $query->paginate(10);
-            //dd($result->total());
+            // dd(DB::getQueryLog());
             return VulnerResource::collection($result);
         }
         return false;
@@ -223,7 +223,7 @@ class VulnerController extends Controller
         
         $request->validate([
             'season' => 'required',
-            'files' => 'required',
+            'files' => 'required|mimes:txt,csv',
         ]);
         $ffl = null;
         $rows=0;

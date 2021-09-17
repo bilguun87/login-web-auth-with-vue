@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         // ...
         Spatie\Permission\PermissionServiceProvider::class,
+        Yajra\Oci8\Oci8ServiceProvider::class,
 
     ],
 

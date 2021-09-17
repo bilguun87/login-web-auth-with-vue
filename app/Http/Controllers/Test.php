@@ -29,4 +29,24 @@ class Test extends Controller
 
 		}
     }
+
+    public function OracleDB()
+    {
+    	$username = "secadmin";
+    	$password = "";
+    	$address = "gbdb-dc1-scan.statebank.mn";
+    	$servicename = "gb_workload.statebank.mn";
+    	
+    	try{
+    		$conn = oci_connect($username, $password, $address."/".$servicename);
+    		if (!$conn) {
+				$e = oci_error();
+				return $e;
+			}
+			return "Connected";
+    	}
+    	catch (\Throwable $e){
+    		return $e;
+    	}
+    }
 }

@@ -42,6 +42,11 @@ class Handler extends ExceptionHandler
                 return response('The specified URL cannot be  found.', 404);
             }
         });*/
+        /*$this->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
+            return response()->json([
+                'message' => 'You do not have the required authorization.'
+            ], 403);
+        });*/
     }
 
     public function report(Throwable $e)
@@ -59,6 +64,5 @@ class Handler extends ExceptionHandler
         }
         
         return parent::render($request, $e);
-
     }
 }

@@ -47,6 +47,23 @@
 		<div class="row" style="padding-top: 10px; padding-bottom: 10px;">
 			<div class="col-md-2"><button class="btn btn-primary btn-sm" @click="getRecords">Search</button></div>
 			<div class="col-md-2"><button class="btn btn-success btn-sm" @click="addRecord">Add</button></div>
+			<div class="col-md-2">
+				<button class="btn btn-outline-info btn-sm" data-toggle="collapse" data-target="#collapseImport" aria-expanded="false" aria-controls="collapseImport">
+					Show Import Section
+				</button>
+			</div>
+		</div>
+		<div id="collapseImport" class="row collapse" style="padding-top: 10px;">
+			<div class="col">
+				<div class="custom-file">
+	                <input type="file" class="custom-file-input" id="file" ref="buckupfile" aria-describedby="importHelp" v-on:change="backupFileUpload" accept=".csv">
+	                <label class="custom-file-label">Choose file</label>
+	                <small id="importHelp" class="form-text text-muted" style="font-size:10px;">Uploading file: <b>{{importfile.name}}</b></small>
+	            </div>
+            </div>
+            <div class="col">
+            	<div class="col-md-2"><button class="btn btn-success btn-sm" @click="importRecords">import</button></div>
+            </div>
 		</div>
 		<div style="width: 100%;"><img v-show="loading" style="margin-left: auto; margin-right: auto; height: 30px; width: 30px; display: block;" src="/img/loading_2.gif" alt="Loading"></div>
 		<div v-if="errmsg != ''" class="alert-maba">{{ errmsg }}</div>
@@ -157,7 +174,8 @@
 					if(date.getDate() == today.getDate() && date.getMonth() == today.getMonth())
 						return true
 			    	}
-				}
+				},
+				importfile: {}
 			}
 		},
 		components: {
@@ -325,11 +343,11 @@
 				var url = '/api/backup/search/';
 				page = typeof(page) == 'object'? 1: page;
 				url = url + '?page=' + page;
-				if (this.form.name !== undefined)
+				if (this.form.name !== undefined && this.form.name != '')
 					url = url + '&nm=' + this.form.name;
-				if (this.form.ogson !== undefined)
+				if (this.form.ogson !== undefined && this.form.ogson != '')
 					url = url + '&og=' + this.form.ogson;
-				if (this.form.awsan !== undefined)
+				if (this.form.awsan !== undefined && this.form.awsan != '')
 					url = url + '&aw=' + this.form.awsan;
 				if (this.form.type_id !== undefined)
 					url = url + '&ti=' + this.form.type_id;
@@ -460,6 +478,51 @@
 					this.records[event.target.value].ogson = response.data.data[0].performer_name;
 					this.records[event.target.value].awsan = response.data.data[0].requester_name;
 					this.hideModals();
+					this.loading = false;
+				}).catch(function (error) {
+					self.loading = false;
+                    //self.clearErrmsg();
+                    console.log(error);
+                    if (error.response.status == 401)
+                        window.location.href = '/login';
+                    else if (error.response.status == 500)
+                        self.errmsg = error.response.data.message;
+                    else if (error.response.status == 422){
+                    	self.errmsg = error.response.data.message;
+                    	//console.log(error)
+                    }
+                    else if (error.response.status == 501)
+                    	self.errmsg = error.response.data.errorInfo[2];
+                    	//console.log(error.response.data.errorInfo[2]);
+                    else
+                        self.errmsg = error.response.data.message;
+                        
+                    setTimeout(function(){self.errmsg = ''}, 5000);
+				})
+			},
+			backupFileUpload: function(event){
+				let file = event.target.files[0]
+				if(file !== undefined){
+					// console.log(file)
+					this.importfile = file
+				}
+			},
+			importRecords: function(){
+				let self = this;
+				this.loading = true;
+				this.errmsg = "";
+				var pagesize = 10;
+				this.hideModals();
+				let formData = new FormData();
+	            formData.append('file', this.importfile);
+	            formData.append('ogson', this.form.ogson);
+	            formData.append('awsan', this.form.awsan);
+	            formData.append('type_id', this.form.type_id);
+	            formData.append('place_id', this.form.place_id);
+	            formData.append('date', this.form.date);
+				
+				axios.post('/api/backup/import', formData).then((response) => {	
+					this.getRecords(1);
 					this.loading = false;
 				}).catch(function (error) {
 					self.loading = false;

@@ -297,12 +297,12 @@
 					this.curSeason.season = 1;
 					this.curSeason.season_name = "I";
 				}
-				else if (3 <= month < 6){
+				else if (3 <= month && month < 6){
 					this.curSeason.year = new Date().getFullYear();
 					this.curSeason.season = 2;
 					this.curSeason.season_name = "II";
 				}
-				else if (6 <= month < 9){
+				else if (6 <= month && month < 9){
 					this.curSeason.year = new Date().getFullYear();
 					this.curSeason.season = 3;
 					this.curSeason.season_name = "III";
@@ -312,6 +312,7 @@
 					this.curSeason.season = 4;
 					this.curSeason.season_name = "IV";
 				}
+				// console.log(this.curSeason.year + '-' + this.curSeason.season)
 			},
 			setEditName: function(event){
 				this.editDep.name = event.target.value;

@@ -18,7 +18,8 @@ class MenuResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'url' => $this->url,
-            'img' => $this->img
+            'img' => $this->img,
+            "required_perm" => $this->required_perm
         ];
         //return parent::toArray($request);
     }

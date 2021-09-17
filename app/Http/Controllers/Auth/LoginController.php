@@ -51,7 +51,8 @@ class LoginController extends Controller
     
     public function login(Request $request) {
         $request->validate([
-            'name' => ['required', new AllowedOrNot],
+            /*'name' => ['required', new AllowedOrNot],*/
+            'name' => 'required',
             'password' => 'required',
         ]);
 
@@ -61,6 +62,14 @@ class LoginController extends Controller
             return redirect()->back()->withInput(['name'])->withErrors(['name' => 'Wrong credentials']);    
         }
         return redirect()->intended('home');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('login');
     }
 
 }

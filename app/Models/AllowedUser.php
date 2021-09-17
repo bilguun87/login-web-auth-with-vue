@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AllowedUser extends Model
 {
     use HasFactory;
+    protected $table = 'allowed_users';
+    protected $fillable = ['domain','created_at','updated_at'];
 }

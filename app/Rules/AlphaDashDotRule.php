@@ -25,11 +25,11 @@ class AlphaDashDotRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        //dd(preg_match('/[^\pL\pM\pN\-\.\s]+/u', $value));
-        if(preg_match('/[^\pL\pM\pN\-\.\s]+/u', $value) > 0)
-            return false;
+        // dd(preg_match('/^[\pL\pM\pN\-\.\s]+$/ui', $value));
+        if(preg_match('/^[\pL\pM\pN\-\.\s\_\/\,]+$/ui', $value) > 0)
+            return true;
         
-        return true;
+        return false;
     }
 
     /**
@@ -39,6 +39,6 @@ class AlphaDashDotRule implements Rule
      */
     public function message()
     {
-        return 'The :attribute may only contain letters, numbers, dashes and dots';
+        return 'The :attribute may only contain letters, numbers, dashes, spaces and dots';
     }
 }

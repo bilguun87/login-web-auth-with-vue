@@ -13,10 +13,24 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                
-
+                <ul class="navbar-nav mr-auto">
+                    @canany(['link.view','link.manage'])
+                    <li class="nav-item {{ (request()->is('links')) ? 'active' : '' }}">
+                        <a class="nav-link" href="/links" class="sidelink" style="font-size: 15px;">Links</a>
+                    </li>
+                    @endcanany
+                </ul>
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
+                    @can('user.manage')
+                    <li class="nav-item dropdown">
+                        <i class="bi bi-gear-fill nav-link" style="font-size: 2em;" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/users">User Management</a>
+                            <a class="dropdown-item" href="/roles">Role Management</a>
+                        </div>
+                    </li>
+                    @endcan
                     <!-- Authentication Links -->
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="font-size: 15px;">

@@ -91,6 +91,17 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'oracle' => [
+            'driver'         => 'oracle',
+            'host'           => env('DB_HOST_ORA', 'carddb-dc1-scan.statebank.mn'),
+            'port'           => env('DB_PORT_ORA', '1521'),
+            'database'       => env('DB_DATABASE_ORA', ''),
+            'service_name'   => env('DB_SERVICE_NAME_ORA', 'faid_workload'),
+            'username'       => env('DB_USERNAME_ORA', 'mabamonit'),
+            'password'       => env('DB_PASSWORD_ORA', 'Maba#$123'),
+            'charset'        => env('DB_CHARSET_ORA', 'AL32UTF8'),
+            'prefix'         => env('DB_PREFIX_ORA', ''),
+        ],
     ],
 
     /*

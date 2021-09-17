@@ -18,6 +18,7 @@ class CreateMenusTable extends Migration
             $table->string('name')->unique();
             $table->string('url');
             $table->string('img');
+            $table->string('required_perm');
             $table->timestamps();
         });
     }
